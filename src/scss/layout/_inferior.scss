@@ -1,0 +1,58 @@
+@include tablet{
+    .seccion-inferior{
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        column-gap: 2rem;
+    }
+}
+
+.entrada-blog {
+    margin-bottom: 2rem;
+    @include tablet {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        column-gap: 2rem;
+    }
+    &:last-child{
+        margin-bottom: 0;
+    }
+
+    .imagen {
+        picture {
+            height: 100%;
+            img{
+                height: 90%;
+            }
+        }
+    }
+}
+
+.texto-entrada{
+    a{
+        color: $negro;
+        display: block;
+        margin-top: 1.2rem;
+        @include tablet{
+            margin-top: 0;
+            display: inline-block;
+        }
+    }
+    
+    h4 {
+        margin: 0;
+        line-height: 1.2; //Achico un poco el espacio entre lineas.
+
+        &::after{ //Agrego una linea debajo del h4
+            content: "";
+            display: block;
+            width: 12rem;
+            height: .3rem;
+            background-color: $verde;
+            margin-top: 1rem;
+        }
+    }
+
+    span {
+        color: $naranja;
+    }
+}

@@ -1,0 +1,12 @@
+.boton-naranja-block {
+    @include boton($naranja, block);
+}
+
+.boton-naranja {
+    @include boton($naranja, inline-block);
+}
+
+.boton-verde {
+    @include boton($verde, inline-block);
+    margin-top: 2rem;
+}

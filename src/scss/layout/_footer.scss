@@ -1,6 +1,7 @@
 .footer{
     background-color: $grisOscuro;
     padding: 2rem;
+    margin-bottom: 0;
 
     .contenedor-footer{
         padding-top: 1.2rem;
@@ -11,7 +12,5 @@
         color: $blanco;
     }
 
-    &.seccion {
-        margin-bottom: 0;
-    }
+    
 }
