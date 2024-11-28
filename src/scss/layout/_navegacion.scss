@@ -1,0 +1,39 @@
+.barra {
+    padding-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    @include tablet{
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    a{
+        padding-top: 1rem;
+        @include tablet{
+            padding-top: 0;
+        } 
+    }
+}
+
+.navegacion {
+    @include tablet {
+        display: flex; //Cuando haya una pantalla de tablet o mayor, se mostrará como flex
+        align-items: center;
+    }
+
+    a { // Cuando tenga una pantalla menor a tablet se mostrará como bloque
+        color: $blanco;
+        text-decoration: none;
+        font-size: 1.6rem;
+        display: block;
+        text-align: center;
+        @include tablet{
+            margin-right: 2rem;
+        }
+    
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    
+}

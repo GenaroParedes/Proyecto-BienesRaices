@@ -1,0 +1,41 @@
+.no-webp .inicio{
+    background-image: url('../img/header.jpg');
+}
+
+.webp .inicio{
+    background-image: url('../img/header.webp');
+}
+
+.header{
+    background-color: $grisOscuro;
+    padding: 1rem 0 3rem 0;
+
+    &.inicio { //Para darle estilo solo a la pagina principal, ya que esta es la unica que tiene la clase header e inicio.
+        background-position: center center;
+        background-size: cover;
+        @include tablet{
+            min-height: 45rem; //Le damos altura al header
+        }
+
+        .contenido-header {
+            @include tablet{
+                min-height: 45rem; //Le damos la misma altura que al contenedor de header, para poder llevar el 
+                //contenido al centro/abajo/costado, donde querramos (pero dentro del contenedor del header).
+            }
+        }
+    }
+}
+
+.contenido-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    h1{
+        text-align: left;
+        color: $blanco;
+        font-weight: $bold;
+        max-width: 60rem;
+        font-size: 3.5rem;
+    }
+}

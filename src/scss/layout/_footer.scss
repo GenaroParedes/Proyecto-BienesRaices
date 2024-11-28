@@ -1,0 +1,17 @@
+.footer{
+    background-color: $grisOscuro;
+    padding: 2rem;
+
+    .contenedor-footer{
+        padding-top: 1.2rem;
+    }
+
+    .copyright {
+        text-align: center;
+        color: $blanco;
+    }
+
+    &.seccion {
+        margin-bottom: 0;
+    }
+}
