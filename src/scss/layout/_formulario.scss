@@ -1,0 +1,45 @@
+.formulario {
+    p {
+        font-size: 1.4rem;
+        color: $grisOscuro;
+        margin: 2rem 0 0 0;
+    }
+
+    legend {
+        font-size: 2rem;
+        color: $grisOscuro;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    // el selector :not() de CSS representa un elemento que no coincide con una lista de selectores. 
+    input:not([type="submit"]),
+    textarea,
+    select {
+        padding: 1rem;
+        display: block;
+        width: 100%;
+        border: 1px solid $gris;
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    fieldset {
+        border: 2px solid $gris;
+    }
+}
+
+.forma-contacto{
+    max-width: 25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    input[type="radio"] {
+       margin: 0;
+       width: auto;
+    }
+}
