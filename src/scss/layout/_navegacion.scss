@@ -7,16 +7,12 @@
         justify-content: space-between;
     }
 
-    a{
+    a {
         //padding-top: 1rem;
         @include tablet{
             padding-top: 0;
             transition: color .3s;
         }
-        &:hover {
-            color: lighten($naranja, 5%);
-            padding: 0;
-        } 
     }
 }
 
@@ -39,6 +35,11 @@
         &:last-child {
             margin-right: 0;
         }
+
+        &:hover {
+            color: lighten($naranja, 5%);
+            padding: 0;
+        } 
     }
     
 }
