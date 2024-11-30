@@ -17,15 +17,21 @@
 }
 
 .navegacion {
+    //display: none; //Cuando haya una pantalla menor a tablet no se mostrará, se tiene que mostrar cuando apreta el icono
+    //Reemplazo lo anterior por:
+    opacity: 0; //Esto me permite darle un efecto de transición
+    transition: opacity 0.5s ease-in-out;
+
     @include tablet {
         display: flex; //Cuando haya una pantalla de tablet o mayor, se mostrará como flex
         align-items: center;
+        opacity: 1; //En pantalla grande, debe estar visible siempre ya que no se mostrará el icono
     }
 
     a { // Cuando tenga una pantalla menor a tablet se mostrará como bloque
         color: $blanco;
         text-decoration: none;
-        font-size: 1.6rem;
+        font-size: 2rem;
         display: block;
         text-align: center;
         @include tablet{
@@ -42,4 +48,29 @@
         } 
     }
     
+}
+
+//Menú para dispositivos móviles
+.mobile-menu {
+    display: flex;
+    justify-content: center;
+    @include tablet {
+        display: none;
+    }
+    img {
+        width: 5rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+    }
+}
+
+.mostrar {
+    /*display: flex;
+    flex-direction: column;
+    @include tablet {
+        flex-direction: row;
+    }*/
+
+    //Lo anterior se puede hacer de la siguiente forma tambien:
+    opacity: 1; //Esto me permite darle un efecto de transición
 }
