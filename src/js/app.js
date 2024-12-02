@@ -7,6 +7,27 @@ document.addEventListener('DOMContentLoaded', function() { //Funcion callback qu
 
 function darkMode(){
     const botonDarkMode = document.querySelector('.dark-mode-boton');
+    
+    //Detecta si el usuario tiene activado el modo oscuro en su sistema operativo
+    const prefiereDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+
+    //Para ver las propiedades del objeto que devuelve matchMedia
+    //console.log(prefiereDarkMode);
+    //Si el usuario tiene activado el modo oscuro en su sistema operativo, se le agrega la clase dark-mode al body
+    if (prefiereDarkMode.matches) { //Devuelve true o false.
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+
+    //Si el usuario cambia de modo claro a oscuro o viceversa en el sistema, se ejecuta esta funcion
+    prefiereDarkMode.addEventListener('change', () => { 
+        if(prefiereDarkMode.matches){
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    })
 
     botonDarkMode.addEventListener('click', () => /*Se puede hacer de esta forma o como con navegacionResponsive en una funcion aparte*/  {
         document.body.classList.toggle('dark-mode'); //Agrega la clase si no la tiene, la elimina si la tiene al dar click
