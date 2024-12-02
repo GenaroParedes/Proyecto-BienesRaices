@@ -1,38 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienes Raíces</title>
-    <link rel="stylesheet" href="build/css/app.css">
-</head>
-<body>
-    <header class="header">
-        <div class="contenedor contenido-header">
-            <div class="barra">
-                <a href="/">
-                    <img src="build/img/logo.svg" alt="Logo de Bienes Raíces">
-                </a>
-                
-                <div class="mobile-menu"> <!--Para el menu responsive-->
-                    <img src="build/img/barras.svg" alt="Icono Menu Responsive">
-                </div>
-                <div class="derecha">
-                    <img class="dark-mode-boton" src="build/img/dark-mode.svg" alt="Icono dark-mode">
-                    <nav class="navegacion">
-                        <a href="nosotros.html">Nosotros</a>
-                        <a href="anuncios.html">Anuncios</a>
-                        <a href="blog.html">Blog</a>
-                        <a href="contacto.html">Contacto</a>
-                    </nav> <!-- Tenemos que agregar todo esto a las otras paginas .html
-                                esto con PHP se facilita mucho, si no tuvieramos PHP hay que copiar
-                                este mismo codigo en todas las paginas, con PHP esto lo podemos hacer
-                                en una sola linea de codigo. Ahora ponemos todo en las paginas luego veremos
-                                como hacerlo con PHP -->
-                </div>
-            </div> <!--.barra-->
-        </div> <!--.contenedor header-->
-    </header>
+<!-- Incluimos el header desde el archivo header.php, por lo tanto ahora 
+ no duplicamos nada de codigo ya que lo tenemos en un solo lugar -->
+<?php include 'includes/templates/header.php'; ?>
 
     <main class="contenedor">
         <h1>Conoce sobre Nosotros</h1>
@@ -86,10 +54,10 @@
     <footer class="footer seccion">
         <div class="contenedor contenedor-footer">
             <nav class="navegacion">
-                <a href="nosotros.html">Nosotros</a>
-                <a href="anuncios.html">Anuncios</a>
-                <a href="blog.html">Blog</a>
-                <a href="contacto.html">Contacto</a>
+                <a href="nosotros.php">Nosotros</a>
+                <a href="anuncios.php">Anuncios</a>
+                <a href="blog.php">Blog</a>
+                <a href="contacto.php">Contacto</a>
             </nav>
         </div>
 
