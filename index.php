@@ -1,40 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienes Raíces</title>
-    <link rel="stylesheet" href="build/css/app.css">
-</head>
-<body>
-    <header class="header inicio">
-        <div class="contenedor contenido-header">
-            <div class="barra">
-                <a href="/"> <!--De esta forma le decimos que vaya al directorio actual-->
-                    <img src="build/img/logo.svg" alt="Logo de Bienes Raíces">
-                </a>
-                
-                <div class="mobile-menu"> <!--Para el menu responsive-->
-                    <img src="build/img/barras.svg" alt="Icono Menu Responsive">
-                </div>
-                <div class="derecha">
-                    <img class="dark-mode-boton" src="build/img/dark-mode.svg" alt="Icono dark-mode">
-                    <nav class="navegacion">
-                        <a href="nosotros.html">Nosotros</a>
-                        <a href="anuncios.html">Anuncios</a>
-                        <a href="blog.html">Blog</a>
-                        <a href="contacto.html">Contacto</a>
-                    </nav> <!-- Tenemos que agregar todo esto a las otras paginas .html
-                                esto con PHP se facilita mucho, si no tuvieramos PHP hay que copiar
-                                este mismo codigo en todas las paginas, con PHP esto lo podemos hacer
-                                en una sola linea de codigo. Ahora ponemos todo en las paginas luego veremos
-                                como hacerlo con PHP -->
-                </div>
-            </div> <!--.barra-->
-
-            <h1>Venta de Casas y Departamentos Exclusivos de Lujo</h1>
-        </div> <!--.contenedor header-->
-    </header>
+<!-- Incluimos el header desde el archivo header.php, por lo tanto ahora 
+ no duplicamos nada de codigo ya que lo tenemos en un solo lugar -->
+<?php 
+    $inicio = true;
+    include 'includes/templates/header.php'; 
+?>
 
     <main class="contenedor seccion">
         <h1>Más sobre nosotros</h1>
@@ -93,7 +62,7 @@
                         </li>
                     </ul>
 
-                    <a href="anuncios.html" class="boton-naranja-block">Ver Propiedad</a>
+                    <a href="anuncios.php" class="boton-naranja-block">Ver Propiedad</a>
                 </div> <!--.contenido-anuncio-->
             </div> <!--.anuncio-->
             <div class="anuncio">
@@ -123,7 +92,7 @@
                         </li>
                     </ul>
 
-                    <a href="anuncios.html" class="boton-naranja-block">Ver Propiedad</a>
+                    <a href="anuncios.php" class="boton-naranja-block">Ver Propiedad</a>
                 </div> <!--.contenido-anuncio-->
             </div> <!--.anuncio-->
             <div class="anuncio">
@@ -153,20 +122,20 @@
                         </li>
                     </ul>
 
-                    <a href="anuncios.html" class="boton-naranja-block">Ver Propiedad</a>
+                    <a href="anuncios.php" class="boton-naranja-block">Ver Propiedad</a>
                 </div> <!--.contenido-anuncio-->
             </div> <!--.anuncio-->
         </div> <!--.contenedor-anuncios-->
 
         <div class="centrar-btn">
-            <a href="anuncios.html" class="boton-verde">Ver Todas</a>
+            <a href="anuncios.php" class="boton-verde">Ver Todas</a>
         </div>
     </section>
 
     <section class="imagen-contacto">
         <h2>Encuentra la casa de tus sueños</h2>
         <p>Llena el formulario de contacto y un asesor se pondrá en contacto contigo a la brevedad</p>
-        <a href="contacto.html" class="boton-naranja">Contactános</a>
+        <a href="contacto.php" class="boton-naranja">Contactános</a>
     </section>
 
     <div class="contenedor seccion seccion-inferior">
@@ -182,7 +151,7 @@
                     </picture>
                 </div>
                 <div class="texto-entrada">
-                    <a href="entrada.html">
+                    <a href="entrada.php">
                         <h4>Terraza en el techo de tu casa</h4>
                         <p class="informacion-meta">Escrito el: <span>28/11/2024</span> - por: <span>Admin</span></p>
                         <p>Consejos para construir una terraza en el techo de tu casa con los mejores materiales y ahorrando dinero</p>
@@ -198,7 +167,7 @@
                     </picture>
                 </div>
                 <div class="texto-entrada">
-                    <a href="entrada.html">
+                    <a href="entrada.php">
                         <h4>Guía para la decoración de tu hogar</h4>
                         <p class="informacion-meta">Escrito el: <span>28/11/2024</span> - por: <span>Admin</span></p>
                         <p>Maximiza el espacio en tu hogar con esta guía, aprende a combinar muebles y colores para darle vida a tu espacio</p>
@@ -221,10 +190,10 @@
     <footer class="footer seccion">
         <div class="contenedor contenedor-footer">
             <nav class="navegacion">
-                <a href="nosotros.html">Nosotros</a>
-                <a href="anuncios.html">Anuncios</a>
-                <a href="blog.html">Blog</a>
-                <a href="contacto.html">Contacto</a>
+                <a href="nosotros.php">Nosotros</a>
+                <a href="anuncios.php">Anuncios</a>
+                <a href="blog.php">Blog</a>
+                <a href="contacto.php">Contacto</a>
             </nav>
         </div>
 

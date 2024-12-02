@@ -1,3 +1,4 @@
+<!--Este lo mantengo ya que es la base de las paginas-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,11 +21,11 @@
                 <div class="derecha">
                     <img class="dark-mode-boton" src="build/img/dark-mode.svg" alt="Icono dark-mode">
                     <nav class="navegacion">
-                        <a href="nosotros.html">Nosotros</a>
-                        <a href="anuncios.html">Anuncios</a>
-                        <a href="blog.html">Blog</a>
-                        <a href="contacto.html">Contacto</a>
-                    </nav> <!-- Tenemos que agregar todo esto a las otras paginas .html
+                        <a href="nosotros.php">Nosotros</a>
+                        <a href="anuncios.php">Anuncios</a>
+                        <a href="blog.php">Blog</a>
+                        <a href="contacto.php">Contacto</a>
+                    </nav> <!-- Tenemos que agregar todo esto a las otras paginas .php
                                 esto con PHP se facilita mucho, si no tuvieramos PHP hay que copiar
                                 este mismo codigo en todas las paginas, con PHP esto lo podemos hacer
                                 en una sola linea de codigo. Ahora ponemos todo en las paginas luego veremos
@@ -45,10 +46,10 @@
     <footer class="footer seccion">
         <div class="contenedor contenedor-footer">
             <nav class="navegacion">
-                <a href="nosotros.html">Nosotros</a>
-                <a href="anuncios.html">Anuncios</a>
-                <a href="blog.html">Blog</a>
-                <a href="contacto.html">Contacto</a>
+                <a href="nosotros.php">Nosotros</a>
+                <a href="anuncios.php">Anuncios</a>
+                <a href="blog.php">Blog</a>
+                <a href="contacto.php">Contacto</a>
             </nav>
         </div>
 
