@@ -1,7 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() { //Funcion callback que se ejecuta cuando el contenido del DOM ha sido cargado.
     //DOMcontentLoaded es un evento que se dispara cuando el HTML, CSS y JavaScritp han cargado (pagina cargada).
     addEventListener();
+
+    darkMode();
 });
+
+function darkMode(){
+    const botonDarkMode = document.querySelector('.dark-mode-boton');
+
+    botonDarkMode.addEventListener('click', () => /*Se puede hacer de esta forma o como con navegacionResponsive en una funcion aparte*/  {
+        document.body.classList.toggle('dark-mode'); //Agrega la clase si no la tiene, la elimina si la tiene al dar click
+    });
+}
 
 function addEventListener() {
     const mobileMenu = document.querySelector('.mobile-menu');

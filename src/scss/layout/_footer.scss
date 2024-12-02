@@ -7,6 +7,11 @@
         padding-top: 1.2rem;
     }
 
+    .navegacion {
+        opacity: 1; /*Acá tenemos que tener siempre el opacity: 1 ya que la navegacion del footer siempre debe estar*/
+        max-height: 144px;
+    }
+
     .copyright {
         text-align: center;
         color: $blanco;

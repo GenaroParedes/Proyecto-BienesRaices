@@ -1,10 +1,31 @@
-.barra {
-    padding-top: 3rem;
+.derecha {
     display: flex;
     flex-direction: column;
+    align-items: center;
+
+    @include tablet {
+        align-items: end;
+    }
+    .dark-mode-boton {
+        width: 3rem;
+        margin-bottom: 1.5rem;
+        filter: invert(100%); //Invierte los colores de la imagen
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.barra {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    
     @include tablet{
         flex-direction: row;
         justify-content: space-between;
+        align-items: end;
     }
 
     a {
@@ -20,8 +41,8 @@
     //display: none; //Cuando haya una pantalla menor a tablet no se mostrará, se tiene que mostrar cuando apreta el icono
     //Reemplazo lo anterior por:
     opacity: 0; //Esto me permite darle un efecto de transición
-    transition: opacity 0.5s ease-in-out;
-
+    max-height: 0; //Con esto le doy la altura que necesite unicamente cuando demos click en el icono.
+    transition: opacity .5s ease-in-out, max-height .3s linear; 
     @include tablet {
         display: flex; //Cuando haya una pantalla de tablet o mayor, se mostrará como flex
         align-items: center;
@@ -73,4 +94,9 @@
 
     //Lo anterior se puede hacer de la siguiente forma tambien:
     opacity: 1; //Esto me permite darle un efecto de transición
+
+    //Altura de la navegacion (Con todos los enlaces) Agregarlo en el footer para que este siempre
+    max-height: 144px; //a la navegacion le dimos que no tenga altura, cuando demos click en el icono,
+                    // le daremos la altura que necesite para mostrar los links
+    
 }
