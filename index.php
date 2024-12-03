@@ -1,8 +1,12 @@
 <!-- Incluimos el header desde el archivo header.php, por lo tanto ahora 
  no duplicamos nada de codigo ya que lo tenemos en un solo lugar -->
 <?php 
-    $inicio = true;
-    include 'includes/templates/header.php'; 
+    require 'includes/funciones.php'; 
+    /*Empezamos a mejorar nuestro codigo, en vez de llamar a include 'includes/templates/header.php'; 
+    lo vamos a llamar desde la funcion incluirTemplate, asi nos queda mejor organizado nuestro codigo
+    Como en la funcion incluirTemplate tenemos $inicio = false, si no le pasamos nada por parametro,
+    esto nos permite que si no le pasamos nada por parametro, la variable $inicio sea false, y no se aplique la clase inicio*/
+    incluirTemplate('header', $inicio = true);
 ?>
 
     <main class="contenedor seccion">
@@ -187,4 +191,6 @@
         </section>
     </div>
 
-    <?php include 'includes/templates/footer.php'; ?>
+    <?php //No hace falta volver a llamar a require 'includes/funciones.php'; ya que lo hicimos al principio del archivo
+    incluirTemplate('footer');
+    ?>

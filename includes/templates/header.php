@@ -11,7 +11,9 @@
 luego acá verificamos si está en true, y si lo está agrega la clase inicio, sino no la agrega, como
 esta variable va a ser true unicamente en index.php, solo se van a aplicar esos estilos a esa pagina. 
 El isset se utiliza para que no se muestre informacion sobre nuestro sistema. -->
-    <header class="header <?php echo isset($inicio) ? 'inicio' : '' ?>"> 
+<!-- Ahora ya podemos borrar el isset ya que en el archivo de funciones, si la variable inicio no está inicializada
+ por parametro la iguala a false, esto hace que no devuelva error, entonces el isset ya no es necesario -->
+    <header class="header <?php echo $inicio ? 'inicio' : '' ?>"> 
         <div class="contenedor contenido-header">
             <div class="barra">
                 <a href="/">
