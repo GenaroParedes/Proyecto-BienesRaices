@@ -1,6 +1,9 @@
 <!-- Incluimos el header desde el archivo header.php, por lo tanto ahora 
  no duplicamos nada de codigo ya que lo tenemos en un solo lugar -->
-<?php include 'includes/templates/header.php'; ?>
+<?php 
+    require 'includes/funciones.php'; 
+    incluirTemplate('header');
+?>
 
     <main class="contenedor">
         <h1>Conoce sobre Nosotros</h1>
@@ -51,4 +54,6 @@
         </div>
     </section>
 
-    <?php include 'includes/templates/footer.php'; ?>
+    <?php //No hace falta volver a llamar a require 'includes/funciones.php'; ya que lo hicimos al principio del archivo
+    incluirTemplate('footer');
+    ?>
