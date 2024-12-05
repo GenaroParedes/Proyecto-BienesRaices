@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() { //Funcion callback qu
     addEventListener();
 
     darkMode();
+
 });
 
 function darkMode(){
