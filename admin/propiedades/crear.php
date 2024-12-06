@@ -131,7 +131,7 @@
 ?>
 
     <main class="contenedor">
-        <h1>Crear</h1>
+        <h1>Crear Propiedad</h1>
 
         <a href="/admin" class="boton boton-verde">Volver</a>
 
@@ -158,10 +158,12 @@
 cuando tengamos que recuperar esos datos ingresados por el formulario al titulo de la propiedad lo vamos a obtener
 por medio del atributo titulo ya que es el valor que tiene el name-->
                 <label for="titulo">Titulo:</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Titulo Propiedad" value="<?php echo $titulo; ?>">
+                <input type="text" id="titulo" name="titulo" placeholder="Titulo Propiedad" 
+                value="<?php echo $titulo; ?>">
                 <!--El value="" es para que cuando se envie el formulario y haya un error, no se borren los datos ingresados-->
                 <label for="precio">Precio:</label>
-                <input type="number" id="precio" name="precio" placeholder="Precio de la Propiedad" value="<?php echo $precio; ?>">
+                <input type="number" id="precio" name="precio" placeholder="Precio de la Propiedad" 
+                value="<?php echo $precio; ?>">
 
                 <label for="imagen">Imagen:</label>
                 <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
@@ -174,13 +176,16 @@ por medio del atributo titulo ya que es el valor que tiene el name-->
             <fieldset>
                 <legend>Información de la propiedad</legend>
                 <label for="habitaciones">Habitaciones:</label>
-                <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" value="<?php echo $habitaciones; ?>">
+                <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" 
+                value="<?php echo $habitaciones; ?>">
 
                 <label for="wc">Baños:</label>
-                <input type="number" id="wc" placeholder="Ej: 3" name="wc" min="1" max="9" value="<?php echo $wc; ?>">
+                <input type="number" id="wc" placeholder="Ej: 3" name="wc" min="1" max="9" 
+                value="<?php echo $wc; ?>">
 
                 <label for="estacionamiento">Estacionamiento:</label>
-                <input type="number" id="estacionamiento" placeholder="Ej: 3" name="estacionamiento" min="1" max="9" value="<?php echo $estacionamiento; ?>">
+                <input type="number" id="estacionamiento" placeholder="Ej: 3" name="estacionamiento" min="1" max="9" 
+                value="<?php echo $estacionamiento; ?>">
             </fieldset>
 
             <fieldset>
@@ -197,7 +202,10 @@ si coinciden es porque el usuario ya habia seleccionado alguno de los vendedores
 que quede el valor que habia seleccionado, tenemos que comparar y si son iguales lo seleccionamos, sino lo dejamos 
 vacio (el campo por defecto selected) el valor de vendedorId se carga cuando le damos click a enviar el formulario
 Entonces, si anteriormente lo habiamos cargado al vendedor, con esto hacemos que no se borre ante un error. -->
-                        <option <?php echo $vendedorId === $vendedor['id'] ? 'selected' : ''; ?> value="<?php echo $vendedor['id']; ?>"><?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?></option>
+                        <option <?php echo $vendedorId === $vendedor['id'] ? 'selected' : ''; ?> 
+                            value="<?php echo $vendedor['id']; ?>">
+                            <?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?>
+                        </option>
                     <?php } ?>
                 </select>
             </fieldset>
