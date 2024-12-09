@@ -33,5 +33,12 @@ El isset se utiliza para que no se muestre informacion sobre nuestro sistema. --
                     </nav> <!--.navegacion-->
                 </div>
             </div> <!--.barra-->
+
+            <?php
+                if ($inicio) {
+                    echo "<h1>Venta de Casas y Departamentos Exclusivos</h1>";
+                }
+                // echo $inicio ? "<h1>Venta de Casas y Departamentos Exclusivos</h1>" : ''; //Otra forma de hacerlo
+            ?>
         </div> <!--.contenedor header-->
     </header>
