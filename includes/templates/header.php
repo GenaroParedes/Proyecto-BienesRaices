@@ -1,3 +1,12 @@
+<?php
+    //Esto es para verificar si la sesion ya esta iniciada, si no lo está la inicia, esto se hace para que no de error
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+
+    $auth = $_SESSION['login'] ?? false; //Si no existe la sesion, le asigna false
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +39,9 @@ El isset se utiliza para que no se muestre informacion sobre nuestro sistema. --
                         <a href="anuncios.php">Anuncios</a>
                         <a href="blog.php">Blog</a>
                         <a href="contacto.php">Contacto</a>
+                        <?php if ($auth) { ?> <!--Si el usuario esta autenticado, muestra el boton de cerrar sesion-->
+                            <a href="cerrar-sesion.php">Cerrar Sesión</a>
+                        <?php } ?>
                     </nav> <!--.navegacion-->
                 </div>
             </div> <!--.barra-->

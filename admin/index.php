@@ -1,5 +1,14 @@
 <!-- Aquí vamos a ingresar cuando querramos realizar un CRUD con el usuario ADMIN -->
 <?php 
+    require '../includes/funciones.php';
+    //Validar que el usuario este logueado
+    $auth = estaAutenticado();
+    if (!$auth) {
+        header('Location: /');
+    }
+
+
+
     //Conexion a la base de datos para listar las propiedades - Esto lo vamos a hacer muchas veces - Son 5 pasos
     // 1 - Importar la conexion
     require '../includes/config/database.php';
@@ -36,8 +45,6 @@
         }
     }
 
-
-    require '../includes/funciones.php'; 
     incluirTemplate('header');
 ?>
 
