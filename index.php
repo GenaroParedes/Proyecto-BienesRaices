@@ -1,7 +1,7 @@
 <!-- Incluimos el header desde el archivo header.php, por lo tanto ahora 
  no duplicamos nada de codigo ya que lo tenemos en un solo lugar -->
 <?php 
-    require 'includes/funciones.php'; 
+    require 'includes/app.php'; 
     /*Empezamos a mejorar nuestro codigo, en vez de llamar a include 'includes/templates/header.php'; 
     lo vamos a llamar desde la funcion incluirTemplate, asi nos queda mejor organizado nuestro codigo
     Como en la funcion incluirTemplate tenemos $inicio = false, si no le pasamos nada por parametro,
