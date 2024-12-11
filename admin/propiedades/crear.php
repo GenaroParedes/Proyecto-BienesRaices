@@ -1,21 +1,24 @@
 <!-- En el archivo del header teniamos en los src build/css/app.css, debemos agregarle una barra al inicio
  para que nos tome todos los archivos bien (/build/css/app.css). Lo mismo hacemos con el footer.-->
 <?php 
-    require '../../includes/funciones.php'; 
+    require '../../includes/app.php'; 
+    use App\Propiedad;
+    use Intervention\Image\Drivers\Gd\Driver;
+    use Intervention\Image\ImageManager;
+
     //Validar que el usuario este logueado
     $auth = estaAutenticado();
     if (!$auth) {
         header('Location: /');
     }
 
-    require '../../includes/config/database.php';
     $db = conectarDB();
     //Consulta para obtener los vendedores para mostrar en el formulario 
     $consulta = "SELECT * FROM vendedores";
     $resultado = mysqli_query($db, $consulta);
 
     //Arreglo con mensaje de errores
-    $errores = [];
+    $errores = Propiedad::getErrores();
 
     //Inicializar las variables vacías para guardar los datos de los campos que si se ingresaronç
     $titulo = '';
@@ -30,107 +33,39 @@
     //$_SERVER nos trae la informacion del servidor, en este caso el metodo que se esta utilizando (POST al enviar el formulario)
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
 
-        //$_POST nos trae la informacion que se esta enviando por el formulario
-        /*echo "<pre>";
-        var_dump($_POST);
-        echo "</pre>";*/
+        $propiedad = new Propiedad($_POST);
 
-        //$_FILES nos trae la informacion de los archivos que se estan enviando por el formulario, utilizar para ver los datos que devuelven cuando subimos una imagen
-        /*echo "<pre>";
-        var_dump($_FILES);
-        echo "</pre>";*/
-
-        //exit; Cuando probamos los var_dump y queremos que no se ejecute el codigo de abajo
-
-        /*Para tomar los valores de cada campo del formulario, con mysqli_real_escape_string evitamos inyeccion SQL, 
-        es decir, verifica los tipos de datos que se ingresan, tambien evita que se ingresen caracteres especiales, 
-        ademas de que se asegura que los datos ingresados sean del tipo correcto*/
-        $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
-        $precio = mysqli_real_escape_string($db, $_POST['precio']);
-        $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
-        $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
-        $wc = mysqli_real_escape_string($db, $_POST['wc']);
-        $estacionamiento = mysqli_real_escape_string($db, $_POST['estacionamiento']);
-        $vendedorId = mysqli_real_escape_string($db, $_POST['vendedor']);
-        $creado = date('Y/m/d');
-        //Asignar files hacia una variable
-        $imagen = $_FILES['imagen'];
-
-        //Validar toda la informacion
-        if (!$titulo) {
-            $errores[] = "Debes añadir un titulo";
+        //Generar un nombre unico para cada imagen
+        $nombreImagen = md5(uniqid( rand(), true)) . '.jpg';
+        if($_FILES['imagen']['tmp_name']) {
+            //Configuracion del manager de imagenes
+            $manager = new ImageManager(Driver::class);
+            //Leer la imagen y luego redimensionarla
+            $imagen = $manager->read($_FILES['imagen']['tmp_name'])->cover(800, 600);
+            $propiedad->setImagen($nombreImagen);
         }
 
-        if (!$precio) {
-            $errores[] = "El precio es obligatorio";
-        }
-
-        if (strlen($descripcion) < 50) {
-            $errores[] = "La descripción es obligatoria y debe contener más de 50 caracteres";
-        }
-
-        if (!$habitaciones) {
-            $errores[] = "El número de habitaciones es obligatorio";
-        }
-
-        if (!$wc) {
-            $errores[] = "El número de baños es obligatorio";
-        }
-
-        if (!$estacionamiento) {
-            $errores[] = "El número de estacionamientos es obligatorio";
-        }
-
-        if (!$vendedorId) {
-            $errores[] = "Elige un vendedor";
-        }
-        //Validacion de archivo - Si el campo name esta vacio o si hay un error (por tamaño), entonces no se sube la imagen
-        //Estos 
-        if(!$imagen['name'] || $imagen['error']) { 
-            $errores[] = "La imagen es obligatoria";
-        }
-
-        //Validar por tamaño (1Mb máximo)
-        $tamaño = 1000 * 1000; //1Mb
-        if ($imagen['size'] > $tamaño) {
-            $errores[] = "La imagen es muy pesada";
-        }
-
-        /*echo "<pre>";
-        var_dump($errores);
-        echo "</pre>";*/
+        $errores = $propiedad->validar();
 
         //Revisar que el arreglo de errores este vacio
         if (empty($errores)){
-            //Subida de archivos
-            //Crear carpeta
-            $carpetaImagenes = '../../imagenes/'; //Carpeta donde se van a guardar los archivos (imagenes subidas)
-            if (!is_dir($carpetaImagenes)) { //is_dir verifica si existe la carpeta
-                mkdir($carpetaImagenes); //Si no existe la carpeta, la crea
+            
+            if (!is_dir(CARPETA_IMAGENES)) { 
+                mkdir(CARPETA_IMAGENES); 
             }
 
-            //subir la imagen a la carpeta
-            //Nombre de imagen, para que cada imagen tenga un nombre distinto:
-            $nombreImagen = md5(uniqid( rand(), true)) . '.jpg';
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen); //tmp_name es el nombre temporal del archivo
-
-            // Insertar en la base de datos
-            $query = "INSERT INTO propiedades (titulo, precio, imagen, descripcion, habitaciones, wc, estacionamiento, creado, vendedorId) 
-            VALUES ('$titulo', '$precio', '$nombreImagen', '$descripcion', '$habitaciones', '$wc', '$estacionamiento', '$creado', '$vendedorId')";
-            //echo $query; //Para probar que funcione
-
-            $resultado = mysqli_query($db, $query);
+            //Guarda la imagen en el servidor
+            $imagen->save(CARPETA_IMAGENES . $nombreImagen);
+            //Guardamos la propiedad en BD
+            $resultado = $propiedad->guardar(); 
             if($resultado) {
                 //Redireccionar al usuario cuando la propiedad se crea correctamente para que no aprete varias veces el boton
-                //Este debe ir siempre antes de incluir codigo HTML
                 header('Location: /admin?resultado=1'); 
                 //resultado=1 es para que se muestre un mensaje de exito, este se va a mostrar en el index.php
                 // en la parte de arriba, donde se hace la consulta de la queryString
 
             }
         }
-        
-        
     };
     
     incluirTemplate('header');
@@ -196,7 +131,7 @@ por medio del atributo titulo ya que es el valor que tiene el name-->
 
             <fieldset>
                 <legend>Vendedor</legend>
-                <select name="vendedor">
+                <select name="vendedorId">
                     <!-- selected es para que aparezca por defecto --> 
                     <!-- disabled no me deja seleccionar esa opcion, aunque sea la primera que aparezca-->
                     <option value="">-- Seleccione --</option> 
