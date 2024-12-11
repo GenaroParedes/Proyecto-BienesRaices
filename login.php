@@ -48,10 +48,7 @@
                 $errores[] = "El usuario no existe";
             }
         }
-    }
-
-
-    require 'includes/funciones.php'; 
+    } 
     incluirTemplate('header');
 ?>
 
