@@ -2,7 +2,7 @@
     //Este archivo se utiliza unicamente para insertar un usuario en la base de datos, luego se debe borrar.
 
     // Conexion a BD
-    require 'includes/config/database.php';
+    require 'includes/app.php';
     $db = conectarDB();
 
     //Datos usuario

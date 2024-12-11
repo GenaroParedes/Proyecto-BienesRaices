@@ -1,11 +1,4 @@
 <?php 
-    //Importar la conexion
-    require 'includes/config/database.php'; //Esta llamada se hace desde el index.php, por ese motivo pasamos la 
-                                            //ruta relativa desde esa pagina hacia la database.php.
-                                            //Osea, estos anuncios estan en la pagina principal, por eso se hace la llamada desde el index.php  
-    //Sino la otra forma de hacerlo seria:
-    //require __DIR__ . '../config/database.php'; //Esta llamada se hace desde el anuncios.php, por ese motivo pasamos la 
-                                                //ruta relativa desde esa pagina hacia la database.php.
     $db = conectarDB();
     //Consulta
     $query = "SELECT * FROM propiedades LIMIT $limite";

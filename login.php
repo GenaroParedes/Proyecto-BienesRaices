@@ -1,6 +1,6 @@
 <?php 
  //Formulario para iniciar sesion y autenticar al usuario
-    require 'includes/config/database.php';
+    require 'includes/app.php';
     $db = conectarDB();
 
     $errores = [];
