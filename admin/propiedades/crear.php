@@ -7,12 +7,8 @@
     use Intervention\Image\ImageManager;
 
     //Validar que el usuario este logueado
-    $auth = estaAutenticado();
-    if (!$auth) {
-        header('Location: /');
-    }
-
-    $db = conectarDB();
+    estaAutenticado();
+    
     //Consulta para obtener los vendedores para mostrar en el formulario 
     $consulta = "SELECT * FROM vendedores";
     $resultado = mysqli_query($db, $consulta);
@@ -25,16 +21,18 @@
     // Para verificar que los datos se estan enviando correctamente, utilizamos var_dump($_POST)
     //$_SERVER nos trae la informacion del servidor, en este caso el metodo que se esta utilizando (POST al enviar el formulario)
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
-
-        $propiedad = new Propiedad($_POST);
+        //Debemos agregar al $_POST la ['propiedad'] que agregamos en el name del formulario
+        $propiedad = new Propiedad($_POST['propiedad']);
 
         //Generar un nombre unico para cada imagen
         $nombreImagen = md5(uniqid( rand(), true)) . '.jpg';
-        if($_FILES['imagen']['tmp_name']) {
+        
+        //Como agregamos al name de cada input un arreglo de propiedad, entonces lo debo agregar aca tambien.
+        if($_FILES['propiedad']['tmp_name']['imagen']) {
             //Configuracion del manager de imagenes
             $manager = new ImageManager(Driver::class);
             //Leer la imagen y luego redimensionarla
-            $imagen = $manager->read($_FILES['imagen']['tmp_name'])->cover(800, 600);
+            $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800, 600);
             $propiedad->setImagen($nombreImagen);
         }
 

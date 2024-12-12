@@ -6,16 +6,16 @@
     //Validar que el usuario este logueado
     estaAutenticado();
     
-    //Implementar un metodo para obtener todas las propiedades - Necesitamos una sola instancia, por esto lo hacemos estatico
     $propiedades = Propiedad::all();
     $resultado = null;
-
+    if (!empty($_GET['resultado'])){
+        $resultado = $_GET['resultado'];
+    }
     //Cuando apretamos el click en el boton eliminar, se va a realizar un POST, para eliminar esa propiedad.
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         //El $_POST no va a existir hasta que no se mande el REQUEST_METHOD, por eso es importante ponerlo dentro de este if
         $id = $_POST['id'];
         $id = filter_var($id, FILTER_VALIDATE_INT); //Validamos que sea un entero
-
         if ($id) {
             //Eliminar el archivo de la imagen
             $queryImagen = "SELECT imagen FROM propiedades WHERE id = $id";
