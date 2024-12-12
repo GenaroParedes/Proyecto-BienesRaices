@@ -40,7 +40,17 @@ class Propiedad {
         //de los vendedores, para poder seleccionarlos desde el form.
     }
 
-    public function guardar() {
+    public function guardar(){
+        if (isset($this->id)){
+            //Actualizando
+            $this->actualizar();
+        } else {
+            //Creando
+            $this->crear();
+        }
+    }
+
+    public function crear() {
         //Sanitizar los datos
         $abributos = $this->sanitizarDatos();
 
@@ -56,6 +66,27 @@ class Propiedad {
         $resultado = self::$db->query($query);
         return $resultado;
         //debuguear($resultado); //Si devuelve true se ejecutó correctamente
+    }
+
+    public function actualizar(){
+        //Sanitizar los datos
+        $abributos = $this->sanitizarDatos();
+        //Todo lo siguiente lo hacemos para la query a base de datos
+        $valores = [];
+        foreach ($abributos as $key => $value){
+            $valores[] = "{$key}='{$value}'";
+        }
+        //El join convierte el array en un string, separando por coma los valores
+        $query = "UPDATE propiedades SET "; 
+        $query .= join(',', $valores);
+        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
+        $query .= " LIMIT 1 ";
+
+        $resultado = self::$db->query($query);
+        if($resultado) {
+            //Redireccionar al usuario - Le pasamos como resultado un 2 ahora en vez de 1 como en la creacion
+            header('Location: /admin?resultado=2'); 
+        }
     }
 
     //Identificar y unir los atributos de la clase con las columnas de la BD
@@ -127,6 +158,16 @@ class Propiedad {
     }
 
     public function setImagen($imagen) {
+        /*Eliminar la imagen previa en caso de actualizacion de imagen - Comprobamos si existe un id en el objeto
+        si existe id es porque estamos actualizando y no creando ya que el id se autoincrementa directamente en BD */
+       if(isset($this->id)) {
+            //esto nos da la ruta de la imagen que tenia el objeto.
+            $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+            //Si existe el archivo, lo eliminamos
+            if ($existeArchivo) {
+                unlink(CARPETA_IMAGENES . $this->imagen);
+            }
+       }
         if($imagen) {
             $this->imagen = $imagen;
         }
@@ -140,6 +181,16 @@ class Propiedad {
         //Llamamos la funcion que se encarga de iterar por cada registro
         $resultado = self::consultarSQL($query);
         return $resultado;
+    }
+
+    //Busca una propiedad por su id
+    public static function find($id){
+        //Consulta para obtener la propiedad con id pasada por la URL
+        $query = "SELECT * FROM propiedades WHERE id = $id";
+        $resultado = self::consultarSQL($query);
+        //Devuelve el primer objeto del array, en este caso tenemos un solo resultado, 
+        //pero lo hacemos para no devolver un array y devolver unicamente ese objeto
+        return array_shift($resultado);
     }
 
     //Lo hago en una funcion aparte para poder reutilizar esta funcion (Consultar, actualizar, etc)
@@ -172,5 +223,16 @@ class Propiedad {
             }
         }
         return $objeto;
+    }
+
+    //Sincroniza el objeto en memoria con los cambios realizados por el usuario
+    public function sincronizar( $args = []){
+        foreach( $args as $key => $value){
+            //Aca el $this hace referencia al objeto actual que está en el formulario de actualizacion
+            if( property_exists($this, $key) && !is_null($value)) {
+                $this->$key = $value;
+                //$key es cada uno de los atributos de la clase               
+            }
+        }
     }
 }

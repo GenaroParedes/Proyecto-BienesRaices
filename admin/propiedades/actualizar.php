@@ -1,178 +1,69 @@
-<!-- En el archivo del header teniamos en los src build/css/app.css, debemos agregarle una barra al inicio
- para que nos tome todos los archivos bien (/build/css/app.css). Lo mismo hacemos con el footer.-->
- <?php
-    require '../../includes/funciones.php'; 
-
-    //Validar que el usuario este logueado
-    $auth = estaAutenticado();
-    if (!$auth) {
-        header('Location: /');
-    }
-
-    //Obtenemos el valor del id de la propiedad a actualizar que viene en la queryString
+<?php
+    require '../../includes/app.php'; 
+    
+    use App\Propiedad;
+    use Intervention\Image\Drivers\Gd\Driver;
+    use Intervention\Image\ImageManager;
+ 
+    
+    estaAutenticado();
+ 
+    //Validar la URL por ID válido    
     $id = $_GET['id'];
-    //Valido que por la URL venga un INT y que el usuario no me esté ingresando otra cosa a proposito
-    //Si el usuario me ingresa un string, el filter_var me va a devolver false
-    $id = filter_var($id, FILTER_VALIDATE_INT); //Devuelve INT si es un numero, si no devuelve false
-    //var_dump($id); 
-
-    //Si el id no es un entero, redireccionar de nuevo a la pagina admin
-    if (!$id) {
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+    
+    if(!$id){
         header('Location: /admin');
     }
-
  
-    require '../../includes/config/database.php';
-    $db = conectarDB();
-
-    //Consulta para obtener la propiedad con id pasada por la URL
-    $consultaPropiedad = "SELECT * FROM propiedades WHERE id = $id";
-    $resultadoPropiedad = mysqli_query($db, $consultaPropiedad);
-    //Como resultado vamos a obtener una unica propiedad entonces la guardamos en una variable
-    $propiedad = mysqli_fetch_assoc($resultadoPropiedad);
-
-    //Consulta para obtener los vendedores para mostrar en el formulario 
+ 
+    //Consulta para obtener datos de propiedad   
+    $propiedad = Propiedad::find($id);     
+ 
+    //Consultar para obtener los vendedores
     $consulta = "SELECT * FROM vendedores";
     $resultado = mysqli_query($db, $consulta);
-
-    //Arreglo con mensaje de errores
-    $errores = [];
-
-    //En este caso en vez de crear las variables vacias como para crear una propiedad,
-    //vamos a asignarle los valores de la propiedad que queremos actualizar
-    $titulo = $propiedad['titulo'];
-    $precio = $propiedad['precio'];
-    $descripcion = $propiedad['descripcion'];
-    $habitaciones = $propiedad['habitaciones'];
-    $wc = $propiedad['wc'];
-    $estacionamiento = $propiedad['estacionamiento'];
-    $vendedorId = $propiedad['vendedorId'];
-    //La imagen no la cargamos al seleccionador de archivos porque mostraria rutas que no queremos mostrar
-    //La mostraremos aparte
-    $imagenPropiedad = $propiedad['imagen'];
-
-    // Para verificar que los datos se estan enviando correctamente, utilizamos var_dump($_POST)
-    //$_SERVER nos trae la informacion del servidor, en este caso el metodo que se esta utilizando (POST al enviar el formulario)
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
-
-        //$_POST nos trae la informacion que se esta enviando por el formulario
-        /*echo "<pre>";
-        var_dump($_POST);
-        echo "</pre>";*/
-
-        //$_FILES nos trae la informacion de los archivos que se estan enviando por el formulario, utilizar para ver los datos que devuelven cuando subimos una imagen
-       /* echo "<pre>";
-        var_dump($_FILES);
-        echo "</pre>";*/
-
-        //exit; //Cuando probamos los var_dump y queremos que no se ejecute el codigo de abajo
-
-        /*Para tomar los valores de cada campo del formulario, con mysqli_real_escape_string evitamos inyeccion SQL, 
-        es decir, verifica los tipos de datos que se ingresan, tambien evita que se ingresen caracteres especiales, 
-        ademas de que se asegura que los datos ingresados sean del tipo correcto*/
-        $titulo = mysqli_real_escape_string($db, $_POST['titulo']);
-        $precio = mysqli_real_escape_string($db, $_POST['precio']);
-        $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
-        $habitaciones = mysqli_real_escape_string($db, $_POST['habitaciones']);
-        $wc = mysqli_real_escape_string($db, $_POST['wc']);
-        $estacionamiento = mysqli_real_escape_string($db, $_POST['estacionamiento']);
-        $vendedorId = mysqli_real_escape_string($db, $_POST['vendedor']);
-        $creado = date('Y/m/d');
-        //Asignar files hacia una variable
-        $imagen = $_FILES['imagen'];
-
-        /*echo "<pre>";
-        var_dump($imagen);
-        echo "</pre>";
-        exit;*/
-
-        //Validar toda la informacion
-        if (!$titulo) {
-            $errores[] = "Debes añadir un titulo";
-        }
-
-        if (!$precio) {
-            $errores[] = "El precio es obligatorio";
-        }
-
-        if (strlen($descripcion) < 50) {
-            $errores[] = "La descripción es obligatoria y debe contener más de 50 caracteres";
-        }
-
-        if (!$habitaciones) {
-            $errores[] = "El número de habitaciones es obligatorio";
-        }
-
-        if (!$wc) {
-            $errores[] = "El número de baños es obligatorio";
-        }
-
-        if (!$estacionamiento) {
-            $errores[] = "El número de estacionamientos es obligatorio";
-        }
-
-        if (!$vendedorId) {
-            $errores[] = "Elige un vendedor";
-        }
+ 
+    //Arreglo con mensajes de errores
+    $errores = Propiedad::getErrores();
+ 
+    //Ejecutar el código despues de que el usuario mande el formulario
+ 
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //Asignar los atributos
+        $args = $_POST ['propiedad'];
+ 
+        $propiedad->sincronizar($args); 
+ 
+        //Validación
+        $errores = $propiedad->validar();     
         
-        //Acá la validacion de la imagen está de más ya que el usuario quizás quiere dejar la imagen que ya está
-        //entonces no es obligatoria
-        /*if(!$imagen['name'] || $imagen['error']) { 
-            $errores[] = "La imagen es obligatoria";
-        }*/
-
-        //Validar por tamaño (1Mb máximo)
-        $tamaño = 1000 * 1000; //1Mb
-        if ($imagen['size'] > $tamaño) {
-            $errores[] = "La imagen es muy pesada";
+        //Generar un nombre único
+        $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+ 
+        //Subida de archivos
+        if($_FILES['propiedad']['tmp_name']['imagen']){
+            $manager = new ImageManager(Driver::class);
+            //Leer la imagen y luego redimensionarla
+            $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800, 600);
+            $propiedad->setImagen($nombreImagen);
+            
         }
-
-        /*echo "<pre>";
-        var_dump($errores);
-        echo "</pre>";*/
-
-        //Revisar que el arreglo de errores este vacio
-        if (empty($errores)){
-            //Subida de archivos
-            //Crear carpeta
-            $carpetaImagenes = '../../imagenes/'; //Carpeta donde se van a guardar los archivos (imagenes subidas)
-            if (!is_dir($carpetaImagenes)) { //is_dir verifica si existe la carpeta
-                mkdir($carpetaImagenes); //Si no existe la carpeta, la crea
+ 
+        //Revisar que el array de errores este vacio
+        if(empty($errores)) {
+            //Almacenar la imagen
+            $imagen->save(CARPETA_IMAGENES . $nombreImagen);
+            $propiedad->guardar();
+            
+            if($resultado){
+                //Redireccionar al usuario.
+                header('Location: /admin?resultado=2');
             }
-
-            //Si ya hay una imagen en la base de datos, cuando actualicemos y carguemos otra imagen, borramos la anterior
-            if ($imagen['name']) {
-                //Si cargamos una nueva imagen, entonces eliminamos la anterior
-                unlink($carpetaImagenes . $propiedad['imagen']);
-                //Nombre de imagen, para que cada imagen tenga un nombre distinto:
-                $nombreImagen = md5(uniqid( rand(), true)) . '.jpg';
-                //subir la imagen a la carpeta
-                move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen); //tmp_name es el nombre temporal del archivo
-            } else {
-                //Si no cargamos una nueva imagen, entonces mantenemos la anterior
-                $nombreImagen = $propiedad['imagen'];
-            }
-
-
-            // Actualizar en la base de datos - Los INT no llevan comillas simples, en un UPDATE, siempre debemos tener un WHERE
-            $query = "UPDATE propiedades SET titulo = '$titulo', precio = '$precio', imagen = '$nombreImagen',
-            descripcion = '$descripcion', habitaciones = $habitaciones, wc = $wc, estacionamiento = $estacionamiento, 
-            vendedorId = $vendedorId WHERE id = $id";
-            //echo $query; //Para probar que funcione - Siempre comprobar en Dbeaver que la query funcione.
-            //exit; //Para que no se ejecute el codigo de abajo
-
-
-            $resultado = mysqli_query($db, $query);
-            if($resultado) {
-                //Redireccionar al usuario - Le pasamos como resultado un 2 ahora en vez de 1 como en la creacion
-                header('Location: /admin?resultado=2'); 
-            }
+ 
         }
-        
-        
-    };
-
-    incluirTemplate('header');
+    }       
+    incluirTemplate('header');      
 ?>
 
     <main class="contenedor">
