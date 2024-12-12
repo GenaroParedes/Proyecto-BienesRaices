@@ -36,7 +36,8 @@ class Propiedad {
         $this->wc = $args['wc'] ?? '';
         $this->estacionamiento = $args['estacionamiento'] ?? '';
         $this->creado = date('Y/m/d');
-        $this->vendedorId = $args['vendedorId'] ?? '';
+        $this->vendedorId = $args['vendedorId'] ?? 1; //Coloco un 1 momentaneamente hasta que retomemos con la parte
+        //de los vendedores, para poder seleccionarlos desde el form.
     }
 
     public function guardar() {
@@ -75,6 +76,7 @@ class Propiedad {
             //echo $key; //Se imprime el nombre de la columna
             //echo $value; //Se imprime el valor de la columna
             //Sanitizar los datos antes de enviarlos a la BD
+            //Todas las referencias o lo relacionado a BD ahora se hace con "self::$db"
             $sanitizado[$key] = self::$db->escape_string($value);
         }
         return $sanitizado;
@@ -128,5 +130,47 @@ class Propiedad {
         if($imagen) {
             $this->imagen = $imagen;
         }
+    }
+
+    //Lista todas las propiedades
+    public static function all(){
+        //Consulta a realizar
+        $query = "SELECT * from propiedades";
+        
+        //Llamamos la funcion que se encarga de iterar por cada registro
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
+    //Lo hago en una funcion aparte para poder reutilizar esta funcion (Consultar, actualizar, etc)
+    public static function consultarSQL($query) {
+        //Consultar la base de datos
+        $resultado = self::$db->query($query);
+        //Iterar los resultados
+        $array = [];
+        while($registro = $resultado->fetch_assoc()){
+            //Por cada registro llamamos la funcion crearObjeto para realizar la conversión, el array debe devolver un lista de objetos
+            $array[] = self::crearObjeto($registro);
+        }
+        //debuguear($array); //Vamos a tener todos los registros de base de datos convertidos en objetos
+
+        //Liberar la memoria
+        $resultado->free();
+
+        //Retornar los resultados
+        return $array;
+    }
+
+    //Es la funcion que vamos a utilizar para convertir los arreglos que nos devuelve la consulta a la BD en objetos.
+    //La definimos como protected porque va a ser utilizada dentro de esta clase y no por fuera.
+    protected static function crearObjeto($registro) {
+        $objeto = new self; //Esto nos crea una instancia del objeto en el que nos encontramos
+        //Recorro el registro y por cada llave ($key = nombreColumna) lo igualamos a su valor ($value = valor para ese registro)
+        foreach ($registro as $key => $value ){
+            if(property_exists($objeto, $key)){ //Verifica si el objeto $objeto tiene una propiedad con el nombre igual al valor de $key.
+                $objeto -> $key = $value; //Cuando se cumpla que la $key exista, entonces se le asigna su $value
+            }
+        }
+        return $objeto;
     }
 }

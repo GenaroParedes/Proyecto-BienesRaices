@@ -186,49 +186,12 @@
                 <?php echo $error; ?>
             </div>
         <?php } ?>
-
+        <!--Llevamos todo el form a un template, pero las cosas que cambian (en actualizar y crear las dejamos)
+        como por ejemplo la etiqueta form aca tiene method="POST", en actualizar tiene method="GET" y lo mismo
+        para el input-->
         <form class="formulario" method="POST" enctype="multipart/form-data">
         <!-- El ENCTYPE se utiliza SIEMPRE que querramos utilizar archivos en el formulario -->
-            <fieldset>
-                <legend>Información General</legend>
-                <label for="titulo">Titulo:</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Titulo Propiedad" value="<?php echo $titulo; ?>">
-                <!--El value="" es para que cuando se envie el formulario y haya un error, no se borren los datos ingresados-->
-                <label for="precio">Precio:</label>
-                <input type="number" id="precio" name="precio" placeholder="Precio de la Propiedad" value="<?php echo $precio; ?>">
-
-                <label for="imagen">Imagen:</label>
-                <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
-                <!--Mostramos la imagen abajo-->
-                <img src="/imagenes/<?php echo $imagenPropiedad ?>" alt="Imagen Propiedad" class="imagen-small">
-                
-
-                <label for="descripcion">Descripción:</label>
-                <textarea id="descripcion" name="descripcion"><?php echo $descripcion; ?></textarea>
-            </fieldset>
-
-            <fieldset>
-                <legend>Información de la propiedad</legend>
-                <label for="habitaciones">Habitaciones:</label>
-                <input type="number" id="habitaciones" name="habitaciones" placeholder="Ej: 3" min="1" max="9" value="<?php echo $habitaciones; ?>">
-
-                <label for="wc">Baños:</label>
-                <input type="number" id="wc" placeholder="Ej: 3" name="wc" min="1" max="9" value="<?php echo $wc; ?>">
-
-                <label for="estacionamiento">Estacionamiento:</label>
-                <input type="number" id="estacionamiento" placeholder="Ej: 3" name="estacionamiento" min="1" max="9" value="<?php echo $estacionamiento; ?>">
-            </fieldset>
-
-            <fieldset>
-                <legend>Vendedor</legend>
-                <select name="vendedor">
-                    <option value="">-- Seleccione --</option> 
-                    <?php while($vendedor = mysqli_fetch_assoc($resultado)) { ?>
-                        <option <?php echo $vendedorId === $vendedor['id'] ? 'selected' : ''; ?> value="<?php echo $vendedor['id']; ?>"><?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?></option>
-                    <?php } ?>
-                </select>
-            </fieldset>
-
+            <?php include '../../includes/templates/formulario_propiedades.php' ?>
             <input type="submit" value="Actualizar Propiedad" class="boton boton-verde">
         </form>
     </main>

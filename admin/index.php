@@ -1,26 +1,14 @@
 <!-- Aquí vamos a ingresar cuando querramos realizar un CRUD con el usuario ADMIN -->
 <?php 
-    require '../includes/funciones.php';
+    require '../includes/app.php';
+    use App\Propiedad;
+
     //Validar que el usuario este logueado
-    $auth = estaAutenticado();
-    if (!$auth) {
-        header('Location: /');
-    }
-
-
-
-    //Conexion a la base de datos para listar las propiedades - Esto lo vamos a hacer muchas veces - Son 5 pasos
-    // 1 - Importar la conexion
-    require '../includes/config/database.php';
-    $db = conectarDB();
-    // 2 - Escribir el query
-    $query = "SELECT * FROM propiedades";
-    // 3 - Consultar la BD
-    $resultadoConsulta = mysqli_query($db, $query);
+    estaAutenticado();
     
-    
-    //Este 'resultado' es el que viene en la queryString, cuando enviamos el formulario para dar de alta una propiedad
-    $resultado = $_GET['resultado'] ?? null; //el ?? null, me permite que si no hay nada en la variable, no me de error, le asigna null
+    //Implementar un metodo para obtener todas las propiedades - Necesitamos una sola instancia, por esto lo hacemos estatico
+    $propiedades = Propiedad::all();
+    $resultado = null;
 
     //Cuando apretamos el click en el boton eliminar, se va a realizar un POST, para eliminar esa propiedad.
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -69,23 +57,24 @@
                 </tr>
             </thead>
 
-            <tbody> <!-- 4 - Mostrar los resultados -->
-                <?php while($propiedad = mysqli_fetch_assoc($resultadoConsulta)) { ?>
+            <tbody> <!-- 4 - Mostrar los resultados - Debemos modificar el while por un foreach para recorrer los objetos -->
+                <?php foreach( $propiedades as $propiedad ) { ?>
                     <tr>
-                        <td> <?php echo $propiedad['id']; ?> </td>
-                        <td> <?php echo $propiedad['titulo']; ?> </td>
-                        <td><img src="/imagenes/<?php echo $propiedad['imagen'] ?>" alt="Imagen Casa" class="imagen-tabla"></td>
-                        <td>$<?php echo $propiedad['precio']; ?> </td>
+                        <!--Debemos modificar la sintaxis de arreglo por la sintaxis de objeto-->
+                        <td> <?php echo $propiedad -> id; ?> </td>
+                        <td> <?php echo $propiedad -> titulo; ?> </td>
+                        <td><img src="/imagenes/<?php echo $propiedad -> imagen ?>" alt="Imagen Casa" class="imagen-tabla"></td>
+                        <td>$<?php echo $propiedad -> precio; ?> </td>
                         <td>
                 <!--para borrar una propiedad vamos a tener un formulario -->
                             <form method="POST" class="w-100">
                                 <!--Input que no se ven pero se utilizan para obtener el id-->
-                                <input type="hidden" name="id" value="<?php echo $propiedad['id']; ?>">
+                                <input type="hidden" name="id" value="<?php echo $propiedad -> id; ?>">
                                 <input type="submit" href="/admin/propiedades/borrar.php" class="boton-rojo-block" value="Eliminar">
                             </form>
                 <!-- en el href vamos a pasar el id de la propiedad a actualizar, para poder ingresar los datos de la propiedad
                  al formulario para que el usuario no tenga que cargar todo nuevamente -->
-                            <a href="/admin/propiedades/actualizar.php?id=<?php echo $propiedad['id'] ?>" class="boton-naranja-block">Actualizar</a>
+                            <a href="/admin/propiedades/actualizar.php?id=<?php echo $propiedad -> id ?>" class="boton-naranja-block">Actualizar</a>
                         </td>
                     </tr>
                 <?php } ?>
