@@ -48,14 +48,9 @@
             //Guarda la imagen en el servidor
             $imagen->save(CARPETA_IMAGENES . $nombreImagen);
             //Guardamos la propiedad en BD
-            $resultado = $propiedad->guardar(); 
-            if($resultado) {
-                //Redireccionar al usuario cuando la propiedad se crea correctamente para que no aprete varias veces el boton
-                header('Location: /admin?resultado=1'); 
-                //resultado=1 es para que se muestre un mensaje de exito, este se va a mostrar en el index.php
-                // en la parte de arriba, donde se hace la consulta de la queryString
-
-            }
+            $propiedad->guardar(); 
+            //Llevamos este if al metodo crear en la clase propiedad asi nos redirige porque el metodo guardar 
+            //no retorna un resultado, por este motivo llevamos la verificacion a la clase.
         }
     };
     

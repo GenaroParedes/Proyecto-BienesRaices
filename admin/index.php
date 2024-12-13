@@ -8,28 +8,18 @@
     
     $propiedades = Propiedad::all();
     $resultado = null;
-    if (!empty($_GET['resultado'])){
+    if (!empty($_GET['resultado'])){ //Si viene un resultado por URL, tomo su valor. Sino queda con null.
         $resultado = $_GET['resultado'];
     }
     //Cuando apretamos el click en el boton eliminar, se va a realizar un POST, para eliminar esa propiedad.
     if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         //El $_POST no va a existir hasta que no se mande el REQUEST_METHOD, por eso es importante ponerlo dentro de este if
-        $id = $_POST['id'];
+        $id = $_POST['id']; //Agarro el id pasado por URL que aparece al apretar el boton de eliminar
         $id = filter_var($id, FILTER_VALIDATE_INT); //Validamos que sea un entero
         if ($id) {
-            //Eliminar el archivo de la imagen
-            $queryImagen = "SELECT imagen FROM propiedades WHERE id = $id";
-            $resultadoImagen = mysqli_query($db, $queryImagen);
-            $propiedad = mysqli_fetch_assoc($resultadoImagen);
-            unlink('../imagenes/' . $propiedad['imagen']);
-
-            //Eliminar la propiedad
-            $query = "DELETE FROM propiedades WHERE id = $id";
-            $resultado = mysqli_query($db, $query);
-
-            if($resultado) {
-                header('Location: /admin?resultado=3'); //3 es que se elimino correctamente
-            }
+            //Consulta para obtener datos de propiedad y luego eliminarla
+            $propiedad = Propiedad::find($id); 
+            $propiedad->delete();
         }
     }
 

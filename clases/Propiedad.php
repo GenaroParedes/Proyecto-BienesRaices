@@ -27,7 +27,7 @@ class Propiedad {
 
     public function __construct($args = [])
     {
-        $this->id = $args['id'] ?? '';
+        $this->id = $args['id'] ?? null;
         $this->titulo = $args['titulo'] ?? '';
         $this->precio = $args['precio'] ?? '';
         $this->imagen = $args['imagen'] ?? '';
@@ -41,7 +41,7 @@ class Propiedad {
     }
 
     public function guardar(){
-        if (isset($this->id)){
+        if (!is_null($this->id)){
             //Actualizando
             $this->actualizar();
         } else {
@@ -64,8 +64,13 @@ class Propiedad {
 
         //Se usa self cuando el atributo es estatico / se usa this cuando es un atributo publico
         $resultado = self::$db->query($query);
-        return $resultado;
         //debuguear($resultado); //Si devuelve true se ejecutó correctamente
+        if($resultado) {
+            //Redireccionar al usuario cuando la propiedad se crea correctamente para que no aprete varias veces el boton
+            header('Location: /admin?resultado=1'); 
+            //resultado=1 es para que se muestre un mensaje de exito, este se va a mostrar en el index.php
+            // en la parte de arriba, donde se hace la consulta de la queryString
+        }
     }
 
     public function actualizar(){
@@ -86,6 +91,20 @@ class Propiedad {
         if($resultado) {
             //Redireccionar al usuario - Le pasamos como resultado un 2 ahora en vez de 1 como en la creacion
             header('Location: /admin?resultado=2'); 
+        }
+    }
+
+    //Eliminamos una propiedad
+    public function delete(){
+        //self::$db->escape_string($this->id) esto lo hacemos para que el usuario no introduzca en la URL algo malicioso,
+        //Sin intencion de eliminar sino de atacar, en caso de no pasar un int, el escape_string lo va a identificar.
+        $query = "DELETE FROM propiedades WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+        $resultado = self::$db->query($query);
+        //Si hay resultado, redireccionamos a la misma pagina pero con un resultado=3 en la URL para tomar
+        //ese valor y aplicar el mensaje de propiedad eliminada
+        if ($resultado) {
+            $this->borrarImagen();
+            header('location: /admin?resultado=3');
         }
     }
 
@@ -160,16 +179,21 @@ class Propiedad {
     public function setImagen($imagen) {
         /*Eliminar la imagen previa en caso de actualizacion de imagen - Comprobamos si existe un id en el objeto
         si existe id es porque estamos actualizando y no creando ya que el id se autoincrementa directamente en BD */
-       if(isset($this->id)) {
-            //esto nos da la ruta de la imagen que tenia el objeto.
-            $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
-            //Si existe el archivo, lo eliminamos
-            if ($existeArchivo) {
-                unlink(CARPETA_IMAGENES . $this->imagen);
-            }
+       if(!is_null($this->id)) {
+            $this->borrarImagen();
        }
         if($imagen) {
             $this->imagen = $imagen;
+        }
+    }
+
+    //Elimina archivo - Cuando eliminamos una propiedad, tambien tenemos que eliminar su imagen
+    public function borrarImagen(){
+        //esto nos da la ruta de la imagen que tenia el objeto.
+        $existeArchivo = file_exists(CARPETA_IMAGENES . $this->imagen);
+        //Si existe el archivo, lo eliminamos
+        if ($existeArchivo) {
+            unlink(CARPETA_IMAGENES . $this->imagen);
         }
     }
 
