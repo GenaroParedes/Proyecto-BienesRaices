@@ -2,8 +2,8 @@
     require '../../includes/app.php'; 
     
     use App\Propiedad;
+    use Intervention\Image\ImageManager as Image;
     use Intervention\Image\Drivers\Gd\Driver;
-    use Intervention\Image\ImageManager;
  
     
     estaAutenticado();
@@ -42,18 +42,18 @@
         $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
  
         //Subida de archivos
-        if($_FILES['propiedad']['tmp_name']['imagen']){
-            $manager = new ImageManager(Driver::class);
-            //Leer la imagen y luego redimensionarla
-            $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800, 600);
+        if ($_FILES['propiedad']['tmp_name']['imagen']) {
+            $manager = new Image(Driver::class);
+            $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800,600);
             $propiedad->setImagen($nombreImagen);
-            
         }
  
         //Revisar que el array de errores este vacio
         if(empty($errores)) {
             //Almacenar la imagen
-            $imagen->save(CARPETA_IMAGENES . $nombreImagen);
+            if ($_FILES['propiedad']['tmp_name']['imagen']) {
+                $imagen->save(CARPETA_IMAGENES . $nombreImagen);
+            }
             $propiedad->guardar();
             
             if($resultado){
