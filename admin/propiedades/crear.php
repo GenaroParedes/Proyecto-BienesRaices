@@ -3,6 +3,7 @@
 <?php 
     require '../../includes/app.php'; 
     use App\Propiedad;
+    use App\Vendedor;
     use Intervention\Image\Drivers\Gd\Driver;
     use Intervention\Image\ImageManager;
 
@@ -10,17 +11,14 @@
     estaAutenticado();
     
     //Consulta para obtener los vendedores para mostrar en el formulario 
-    $consulta = "SELECT * FROM vendedores";
-    $resultado = mysqli_query($db, $consulta);
-
+    $vendedores = Vendedor::all();
     $propiedad = new Propiedad;
-
     //Arreglo con mensaje de errores
     $errores = Propiedad::getErrores();
 
     // Para verificar que los datos se estan enviando correctamente, utilizamos var_dump($_POST)
     //$_SERVER nos trae la informacion del servidor, en este caso el metodo que se esta utilizando (POST al enviar el formulario)
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') { 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //Debemos agregar al $_POST la ['propiedad'] que agregamos en el name del formulario
         $propiedad = new Propiedad($_POST['propiedad']);
 
@@ -35,9 +33,7 @@
             $imagen = $manager->read($_FILES['propiedad']['tmp_name']['imagen'])->cover(800, 600);
             $propiedad->setImagen($nombreImagen);
         }
-
         $errores = $propiedad->validar();
-
         //Revisar que el arreglo de errores este vacio
         if (empty($errores)){
             

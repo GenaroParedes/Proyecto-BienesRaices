@@ -1,5 +1,5 @@
  <!-- El ENCTYPE se utiliza SIEMPRE que querramos utilizar archivos en el formulario -->
- <fieldset>
+            <fieldset>
                 <legend>Información General</legend>
 <!--El atributo name en los inputs son los que toman los valores que el usuario ingresa en el formulario, es decir
 cuando tengamos que recuperar esos datos ingresados por el formulario al titulo de la propiedad lo vamos a obtener
@@ -39,8 +39,18 @@ por medio del atributo titulo ya que es el valor que tiene el name-->
                 value="<?php echo sanitizar($propiedad->estacionamiento); ?>">
             </fieldset>
 
-            <!--<fieldset>
+            <fieldset>
                 <legend>Vendedor</legend>
-                La seleccion de vendedor tiraba error, por lo que ahora lo borramos pero mas adelante retomamos
-                 para resolver esto 
-            </fieldset> -->
+                <label for="vendedor">Vendedor</label>
+                <select name="propiedad[vendedorId]" id="vendedor">
+                    <option selected value="">-- Seleccione --</option>
+                    <?php foreach ($vendedores as $vendedor) { ?>
+                    <!-- la $propiedad ya trae los valores del $_POST realizado, por lo que si tenemos algun error
+                      $propiedad->vendedorId === $vendedor->id ? 'selected' : '' lo anterior 
+                      nos permitirá dejar seleccionado el vendedor-->
+                        <option <?php echo $propiedad->vendedorId === $vendedor->id ? 'selected' : '';?> value="<?php echo $vendedor->id ?>">
+                            <?php echo sanitizar($vendedor->nombre) . " " . sanitizar($vendedor->apellido); ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </fieldset> 

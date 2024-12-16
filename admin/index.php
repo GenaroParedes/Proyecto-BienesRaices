@@ -2,11 +2,14 @@
 <?php 
     require '../includes/app.php';
     use App\Propiedad;
+    use App\Vendedor;
 
     //Validar que el usuario este logueado
     estaAutenticado();
     
     $propiedades = Propiedad::all();
+    $vendedores = Vendedor::all();
+
     $resultado = null;
     if (!empty($_GET['resultado'])){ //Si viene un resultado por URL, tomo su valor. Sino queda con null.
         $resultado = $_GET['resultado'];
